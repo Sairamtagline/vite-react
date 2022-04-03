@@ -211,24 +211,29 @@ function App() {
     <div className="App">
       <h1>Team 1</h1>
       {Object.entries(finalPlayer).map(([key, value]) => {
-        console.log('value', key, value)
         return (
           <Fragment key={key}>
             <div>
               <h1>Probability {key}</h1>
               <table>
                 <thead>
-
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Points</th>
-                  <th>Team</th>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Points</th>
+                    <th>Team</th>
+                  </tr>
                 </thead>
                 <tbody>
-                  {value.map((c, i) => <tr key={i}>
-                    {Object.values(c).map(n => <td>{n}</td>)}
-                  </tr>)}
-                  {value.length}
+                  <tr>
+                    {value.map((c, i) =>
+                      Object.values(c).map(n => <td key={n}>{n}</td>)
+                    )}
+                    <td> Total Players: {value.length}</td>
+                    <td>
+                      Total Points: {value.map(v => v.points).reduce((a, b) => a + b, 0)}
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -237,7 +242,7 @@ function App() {
         )
       })}
       <br />
-    </div>
+    </div >
   )
 }
 
