@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react/cjs/react.development'
+import { Fragment, useEffect, useState } from 'react'
 import './App.css'
 const totalPoints = 100
 const wk = [1, 4]
