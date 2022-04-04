@@ -186,11 +186,18 @@ function App() {
       let dd = []
       for (let i = 0; i < probability.length; i++) {
         for (let j = 0; j < probability[i].length; j++) {
-          for (let k = 0; k < probability[i][j].length; k++) {
-            dd = [...dd, sortRandom(mergedTeams[k], probability[i][j][k])]
+          const c = () => {
+            for (let k = 0; k < probability[i][j].length; k++) {
+              dd = [...dd, sortRandom(mergedTeams[k], probability[i][j][k])]
+            }
+            if (dd.flat().map(({ points }) => points).reduce((a, b) => a + b, 0) <= 98.5 || dd.flat().map(({ points }) => points).reduce((a, b) => a + b, 0) > 100) {
+              dd = []
+              return c()
+            }
+            jCloned[probability[i][j]] = dd.flat()
+            dd = []
           }
-          jCloned[probability[i][j]] = dd.flat()
-          dd = []
+          c()
         }
       }
       for (let index = 0; index < Object.values(jCloned).length; index++) {
@@ -204,6 +211,17 @@ function App() {
         }
       }
     }
+    const recursivePlayers = first()
+    const matches = recursivePlayers[probability[0][0]].map(current => console.log('current', current)
+      // combinations.some(combination => 
+      //   Object.entries(combination).every(([key, value]) => 
+      //     current[key] === value
+      //   )
+      // )
+    );
+
+    console.log(matches);
+    console.log('recursivePlayers', recursivePlayers)
     setFinalPlayer(first())
   }, [])
 
@@ -222,16 +240,24 @@ function App() {
                     <th>Type</th>
                     <th>Points</th>
                     <th>Team</th>
+                    <th>Total Players</th>
+                    <th>Total Points</th>
                   </tr>
                 </thead>
                 <tbody>
+
+                  {value.map((c, i) => {
+                    return (<tr key={i}>
+                      {Object.values(c).map(n => <td key={n}>{n}</td>)}
+                    </tr>)
+                  }
+                  )}
                   <tr>
-                    {value.map((c, i) =>
-                      Object.values(c).map(n => <td key={n}>{n}</td>)
-                    )}
-                    <td> Total Players: {value.length}</td>
-                    <td>
-                      Total Points: {value.map(v => v.points).reduce((a, b) => a + b, 0)}
+                    <td colSpan={6}> {value.length}</td>
+                  </tr>
+                  <tr>
+                    <td colSpan={7}>
+                      {value.map(v => v.points).reduce((a, b) => a + b, 0)}
                     </td>
                   </tr>
                 </tbody>
